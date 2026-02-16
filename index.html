@@ -46,7 +46,9 @@
 
         // Function to handle the "Waking Up" moment
         function wakeUp() {
-            if (video.paused) {
+            // Check if paused AND NOT ENDED. 
+            // This prevents clicking from restarting the video once it finishes.
+            if (video.paused && !video.ended) {
                 video.play()
                     .then(() => {
                         // Success: Video is playing
@@ -58,9 +60,13 @@
             }
         }
 
+        // Listener to ensure it stays frozen at the end
+        video.addEventListener('ended', () => {
+             video.pause(); // Explicitly stop
+             console.log("Monolith arrival complete.");
+        });
+
         // Listen for ANY interaction on the screen
-        // 'click' covers desktop mouse
-        // 'touchstart' covers mobile tap (faster response than click)
         document.body.addEventListener('click', wakeUp);
         document.body.addEventListener('touchstart', wakeUp, {passive: true});
         
